@@ -1,0 +1,41 @@
+<canvas id=a width=600 height=600 style="position: absolute"></canvas>
+<canvas id=A width=600 height=600></canvas>
+<script>
+c = a.getContext("2d");
+C = A.getContext("2d");
+
+t = 0;
+x = 300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4);
+y = 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4);
+
+setInterval(function(){
+
+  t += 1/90;
+  
+  a.width ^= 0;
+  c.beginPath();
+  c.arc(300,300,200,0,7);
+  c.stroke();
+  c.beginPath();
+  c.moveTo(300,300);
+  c.lineTo(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200);
+  c.stroke();
+  c.beginPath();
+  c.arc(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200, 50, 0, 7);
+  c.stroke();
+  c.beginPath();
+  c.moveTo(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200);
+  c.lineTo(300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4), 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4));
+  c.stroke();
+  
+  C.beginPath();
+  C.strokeStyle = "red";
+  C.lineWidth = 3;
+  C.moveTo(x, y);
+  C.lineTo(x = 300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4), y = 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4));
+  C.stroke();
+  
+
+},16);
+
+</script>
