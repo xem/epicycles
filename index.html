@@ -1,40 +1,85 @@
-<canvas id=a width=600 height=600 style="position: absolute"></canvas>
+﻿<canvas id=a width=600 height=600 style="position: absolute"></canvas>
 <canvas id=A width=600 height=600></canvas>
 <script>
+
+// Circle
 c = a.getContext("2d");
+
+// Path
 C = A.getContext("2d");
 
+// Angle in radians of the main circle (time)
 t = 0;
-x = 300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4);
-y = 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4);
 
-setInterval(function(){
+// Complex numbers
+complex = [[50,-30],[18,8],[12,-10],[-14,-60]];
 
-  t += 1/90;
-  
-  a.width ^= 0;
-  c.beginPath();
-  c.arc(300,300,200,0,7);
-  c.stroke();
-  c.beginPath();
-  c.moveTo(300,300);
-  c.lineTo(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200);
-  c.stroke();
-  c.beginPath();
-  c.arc(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200, 50, 0, 7);
-  c.stroke();
-  c.beginPath();
-  c.moveTo(300 + Math.cos(t) * 200, 300 + Math.sin(t) * 200);
-  c.lineTo(300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4), 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4));
-  c.stroke();
-  
+// Circles centers
+centers = [[300,300]];
+
+// Initial angles
+angles = [];
+
+// Circles radii
+radii = [];
+
+// Circles speeds (in Hz)
+speeds = [1,2,3,4,5,6,7];
+
+// Compute radii, centers, angles 
+for(i in complex){
+  radii[i] = Math.hypot(complex[i][0], complex[i][1]);
+  angles[i] = Math.atan2(complex[i][0], complex[i][1]);
+  if(i > 0){
+    centers[i] = [centers[i-1][0] + radii[i-1], 300]; 
+  }
   C.beginPath();
   C.strokeStyle = "red";
   C.lineWidth = 3;
-  C.moveTo(x, y);
-  C.lineTo(x = 300 + Math.cos(t) * 200 + 50 * Math.cos(t * 4), y = 300 + Math.sin(t) * 200 + 50 * Math.sin(t * 4));
-  C.stroke();
+  C.moveTo(centers[i] + radii[i], 300);
+}
+
+setInterval(function(){
+
+  t += 1/100;
   
+  // Reset canvas
+  a.width ^= 0;
+  
+  x = centers[0][0];
+  y = centers[0][1];
+  
+  for(i in complex){
+  
+    // Trace circles
+    c.beginPath();
+    c.arc(x, y, radii[i], 0, 7)
+    c.stroke();
+
+    // Trace lines
+    c.beginPath();
+    c.moveTo(x, y);
+    
+    x = centers[0][0];
+    y = centers[0][1];
+    
+    for(j = 0; j <= i; j++){
+      x += radii[j] * Math.cos(angles[j] + t * speeds[j]);
+      y += radii[j] * Math.sin(angles[j] + t * speeds[j]);
+      c.lineTo(x, y);
+    }
+    
+    c.stroke();
+    
+    
+    
+    
+  
+  }
+  
+  // Trace final path
+  C.lineTo(x, y);
+  C.stroke();
 
 },16);
 
