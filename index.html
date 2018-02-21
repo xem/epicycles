@@ -11,17 +11,9 @@
     /* GOLF */
 
     p = [
-        [-54, 140],
-        [27, 139],
-        [61, 71],
-        [43, 16],
-        [1, 1],
-        [47, -19],
-        [66, -63],
-        [26, -124],
-        [-47, -126],
-        [-56, 0]
-    ];
+		[0, 0],
+		[0, 0]
+	];
     T = x = y = u = 0;
     onmousemove = e => (x = e.pageX, y = e.pageY);
     onmousedown = e => u = 1;
@@ -29,6 +21,7 @@
 	onkeydown = e => (p = [], f())
 	G = [];
 	(f = _ => {
+		//for (i = p.length - 1; i--;d = p[i]) Math.hypot(p[i][0] - d[0], p[i][1] - d[1]) < 6 && p.splice(i, 1);
 		Z = []; G = [];
 		P = [...p.map(x => [...x])]
 
@@ -65,7 +58,7 @@
     setInterval(() => {
         T += .01;
         a.width ^= U = V = 0;
-        u && p.push([x - 300, y - 300]);
+        u && Math.hypot(x - 300 - p[p.length - 1][0], y - 300 - p[p.length - 1][1]) > 9 && p.push([x - 300, y - 300]);
         for (i of p) c.fillRect(300 + i[0], 300 + i[1], 4, 4);
         for (i of G)
             X = U + i[1] * Math.cos(i[0] * T + i[2]),
@@ -79,6 +72,7 @@
             V = Y;
 
         Z.push([X, Y]);
+		c.lineCup = "butt";
         c.strokeStyle = "#33f";
 		c.lineWidth = 4;
 		c.beginPath();
