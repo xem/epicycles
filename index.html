@@ -1,88 +1,72 @@
-<canvas id=a width=600 height=600 style="position: absolute"></canvas>
+﻿<canvas id=a width=600 height=600 style="position: absolute"></canvas>
 <canvas id=A width=600 height=600></canvas>
 <script>
     c = a.getContext("2d");
     C = A.getContext("2d");
 
-    t = 0;
-
-    points = [
-        [-0.54, 1.4],
-        [0.27, 1.39],
-        [0.61, 0.71],
-        [0.43, 0.16],
-        [0.01, 0.01],
-        [0.47, -0.19],
-        [0.66, -0.63],
-        [0.26, -1.24],
-        [-0.47, -1.26],
-        [-0.56, 0]
+    P = [
+        [-54, 140],
+        [27, 139],
+        [61, 71],
+        [43, 16],
+        [1, 1],
+        [47, -19],
+        [66, -63],
+        [26, -124],
+        [-47, -126],
+        [-56, 0]
     ];
-	
-    for (i = 0; Math.log2(points.length) != Math.floor(Math.log2(points.length)); i += 2)
-        points.splice(i + 1, 0, [(points[i][0] + points[i + 1][0]) / 2, (points[i][1] + points[i + 1][1]) / 2]);
-
-    f = (P) => {
-        for (i = 0; i < P.length; i++) {
-            for (j = 0, h = i, k = P.length; k >>= 1; h >>= 1)
-                j = (j << 1) | (h & 1);
-            j > i && ([P[i][0], P[j][0], P[i][1], P[j][1]] = [P[j][0], P[i][0], P[j][1], P[i][1]])
-        }
-        for (H = 1; H * 2 <= P.length; H *= 2)
-            for (i = 0; i < P.length; i += H * 2)
-                for (j = i; j < i + H; j++)
-                    tre = P[j + H][0] * Math.cos(Math.PI * (j - i) / H) + P[j + H][1] * Math.sin(Math.PI * (j - i) / H),
-                    tim = -P[j + H][0] * Math.sin(Math.PI * (j - i) / H) + P[j + H][1] * Math.cos(Math.PI * (j - i) / H),
-                    P[j + H][0] = P[j][0] - tre,
-                    P[j + H][1] = P[j][1] - tim,
-                    P[j][0] += tre,
-                    P[j][1] += tim;
+    
+    for(i in P){
+      C.fillRect(300 + P[i][0], 300 + P[i][1], 4, 4);
     }
-
-    calculateGears = P => eval(`
-        for (f(V = [...P]), G = [[0, Math.hypot(V[0][0], V[0][1]) / V.length, Math.atan2(V[0][1], V[0][0])]], I = 1; I <= V.length / 2; I++)
-            G.push([I, Math.hypot(V[I][0], V[I][1]) / V.length, Math.atan2(V[I][1], V[I][0])]),
-            G.push([-I, Math.hypot(V[V.length - I][0], V[V.length - I][1]) / V.length, Math.atan2(V[V.length - I][1], V[V.length - I][0])]);
-        G.pop();
-		G.sort((A, B) => B[1] - A[1])
-	`)
-
-    gears = calculateGears(points, 30);
 	
-    render = function(t) {
-
-        a.width ^= 0;
-        var offsetX = 0,
-            offsetY = 0;
-        for (var i = 0; i < gears.length; i++) {
-            var gear = gears[i];
-            var endX = offsetX + gear[1] * 100 * Math.cos(gear[0] * t + gear[2]);
-            var endY = offsetY + gear[1] * 100 * Math.sin(gear[0] * t + gear[2]);
-            c.beginPath();
-            c.arc(300 + offsetX, 300 + offsetY, gear[1] * 100, 0, 7);
-            c.moveTo(300 + offsetX, 300 + offsetY);
-            c.lineTo(300 + endX, 300 + endY);
-            c.stroke();
-            offsetX = endX;
-            offsetY = endY;
-        }
-
-        C.lineWidth = 3;
-        C.strokeStyle = "red";
-        if (t == 0) {
-            C.moveTo(300 + offsetX, 300 + offsetY);
-        } else {
-            C.lineTo(300 + offsetX, 300 + offsetY);
-        }
-        C.stroke();
-    }
-
-    render(0);
-
-    setInterval(
-        function() {
-            render(t += .01);
-        },
-        16
-    );
+    for (i = 0; Math.log2(P.length) != (Math.log2(P.length) | 0); i = (i + 2) % P.length)
+        P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
+		
+    for (I = 0; I < P.length; I++) {
+        for (A = J = 0, K = P.length; K >>= 1; A++)
+            J = J << 1 | (I >> A & 1);
+        J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
+	}
+    for (H = 1; H * 2 <= P.length; H *= 2)
+        for (I = 0; I < P.length; I += H * 2)
+            for (J = I; J < I + H; J++)
+                E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
+                M = -P[J + H][0] * Math.sin(Math.PI * (J - I) / H) + P[J + H][1] * Math.cos(Math.PI * (J - I) / H),
+                P[J + H][0] = P[J][0] - E,
+                P[J + H][1] = P[J][1] - M,
+                P[J][0] += E,
+                P[J][1] += M;
+	
+    for (G = [[0, Math.hypot(P[0][0], P[0][1]) / P.length, Math.atan2(P[0][1], P[0][0])]], I = 1; I <= P.length / 2; I++)
+        G.push(
+			[I, Math.hypot(P[I][0], P[I][1]) / P.length, Math.atan2(P[I][1], P[I][0])],
+			[-I, Math.hypot(P[P.length - I][0], P[P.length - I][1]) / P.length, Math.atan2(P[P.length - I][1], P[P.length - I][0])]
+		);
+    G.pop();
+	G.sort((A, B) => B[1] - A[1]);
+	
+  T=0;
+	setInterval(Z=>{
+		T+=.02;
+		a.width^=0;
+		U=V=0;
+		for(i in G)
+			H=G[i],
+			X=U+H[1]*Math.cos(H[0]*T+H[2]),
+			Y=V+H[1]*Math.sin(H[0]*T+H[2]),
+			c.beginPath(),
+			c.arc(300+U,300+V,H[1],0,7),
+			c.moveTo(300+U,300+V),
+			c.lineTo(300+X,300+Y),
+			c.stroke(),
+			U=X,
+			V=Y;
+		C.lineWidth=3;
+		C.strokeStyle="#55F";
+		T||C.moveTo(300+U,300+V);
+		C.lineTo(300+X,300+Y);
+		C.stroke()
+	},16)
 </script>
