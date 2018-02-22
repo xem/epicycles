@@ -1,78 +1,83 @@
 ﻿<style>
     body {
-        margin: 0
+        margin: 0;
+        overflow: hidden;
     }
 </style>
-<canvas id=a width=600 height=600 style="position: absolute"></canvas>
+<canvas id=a style="position: absolute"></canvas>
 <script>
-    d = document;
-    c = a.getContext("2d");
+  d = document;
+  c = a.getContext("2d");
+  a.width = innerWidth;
+  a.height = innerHeight;
 
-    /* GOLF */
+  /* GOLF */
 
-    p = [[0,22],[26,0],[27,27],[30,51],[28,73],[0,74],[62,75],[65,42],[65,4],[67,41],[94,19],[66,42],[98,75],[65,45],[64,75],[29,74],[29,49],[27,25],[26,0]];
-	T = x = y = u = 0;
-    onmousemove = e => (x = e.pageX, y = e.pageY);
-    onmousedown = e => u = 1;
-	onmouseup = e => (u = 0, f());
-	onkeydown = e => (p = [], f());
-	(f = _ => {
-		Z = []; G = [];
-		P = [...p.map(x => [...x])];
+  p = [[2,5],[2,9],[1,10],[0,9],[1,10],[2,9],[2,5],[7,5],[4,5],[4,7],[7,7],[7,9],[4,10],[8,10],[8,7],[8,5],[7,6],[8,5],[8,7],[8,10],[10,10],[10,7],[10,4],[10,7],[12,7],[10,7],[13,10],[10,7],[10,10],[4,10],[7,9],[7,7],[4,7],[4,5],[7,5],[0,5]].map(x => x.map(y => y * 30 - 200));
+  T = x = y = u = 0;
+  onmousemove = e => (x = e.pageX, y = e.pageY);
+  onmousedown = e => u = 1;
+  onmouseup = e => (u = 0, f());
+  onkeydown = e => {
+    if(e.which == 40) { Z = []; G.length--; } 
+    else { p = [], f() }
+  }
+  (f = _ => {
+  Z = []; G = [];
+  P = [...p.map(x => [...x])];
 
-		for (i = 0; Math.log2(P.length) != (Math.log2(P.length) | 0); i = (i + 2) % P.length)
-			P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
+  for (i = 0; Math.log2(P.length) != (Math.log2(P.length) | 0); i = (i + 2) % P.length)
+    P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
 
-		for (I = 0; I < P.length; I++) {
-			for (A = J = 0, K = P.length; K >>= 1; A++)
-				J = J << 1 | (I >> A & 1);
-			J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
-		}
+  for (I = 0; I < P.length; I++) {
+    for (A = J = 0, K = P.length; K >>= 1; A++)
+      J = J << 1 | (I >> A & 1);
+    J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
+  }
 
-		for (H = 1; H * 2 <= P.length; H *= 2)
-			for (I = 0; I < P.length; I += H * 2)
-				for (J = I; J < I + H; J++)
-					E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
-					M = -P[J + H][0] * Math.sin(Math.PI * (J - I) / H) + P[J + H][1] * Math.cos(Math.PI * (J - I) / H),
-					P[J + H][0] = P[J][0] - E,
-					P[J + H][1] = P[J][1] - M,
-					P[J][0] += E,
-					P[J][1] += M;
+  for (H = 1; H * 2 <= P.length; H *= 2)
+    for (I = 0; I < P.length; I += H * 2)
+      for (J = I; J < I + H; J++)
+        E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
+        M = -P[J + H][0] * Math.sin(Math.PI * (J - I) / H) + P[J + H][1] * Math.cos(Math.PI * (J - I) / H),
+        P[J + H][0] = P[J][0] - E,
+        P[J + H][1] = P[J][1] - M,
+        P[J][0] += E,
+        P[J][1] += M;
 
-		for (G = [
-				[0, Math.hypot(P[0][0], P[0][1]) / P.length, Math.atan2(P[0][1], P[0][0])]
-			], I = 0; I++ < P.length / 2;)
-			G.push(
-				[I, Math.hypot(P[I][0], P[I][1]) / P.length, Math.atan2(P[I][1], P[I][0])], [-I, Math.hypot(P[P.length - I][0], P[P.length - I][1]) / P.length, Math.atan2(P[P.length - I][1], P[P.length - I][0])]
-			);
+  for (G = [[0, Math.hypot(P[0][0], P[0][1]) / P.length, Math.atan2(P[0][1], P[0][0])]], I = 0; I++ < P.length / 2;)
+    G.push(
+      [I, Math.hypot(P[I][0], P[I][1]) / P.length, Math.atan2(P[I][1], P[I][0])], [-I, Math.hypot(P[P.length - I][0], P[P.length - I][1]) / P.length, Math.atan2(P[P.length - I][1], P[P.length - I][0])]
+    );
 
-		G.pop();
-		G.sort((A, B) => B[1] - A[1]);
-	})();
-	
-    setInterval(`
-        T += .01;
-        a.width ^= U = V = 0;
-        u && (!p.length || Math.hypot(x - 300 - p[p.length - 1][0], y - 300 - p[p.length - 1][1]) > 9) && p.push([x - 300, y - 300]);
-        for (i of p) c.fillRect(300 + i[0], 300 + i[1], 4, 4);
-        for (i of G)
-            X = U + i[1] * Math.cos(i[0] * T + i[2]),
-            Y = V + i[1] * Math.sin(i[0] * T + i[2]),
-            c.arc(300 + U, 300 + V, i[1], 0, 7),
-            c.moveTo(300 + U, 300 + V),
-            c.lineTo(300 + X, 300 + Y),
-            U = X,
-            V = Y;
-		c.stroke();
-        Z.push([X, Y]);
-        c.strokeStyle = "#33f";
-		c.lineWidth = 4;
-		c.beginPath();
-        for (i of Z) {
-            c.lineTo(300 + i[0], 300 + i[1])
-        }
-		c.stroke()
-    `, 16)
+  G.pop();
+  G.sort((A, B) => B[1] - A[1]);
+  })();
+  
+  setInterval(`
+    T += .01;
+    a.width ^= U = V = 0;
+    u && (!p.length || Math.hypot(x - a.width / 2 - p[p.length - 1][0], y - a.height / 2 - p[p.length - 1][1]) > 9) && p.push([x - a.width / 2, y - a.height / 2]);
+    for (i of p) c.fillRect(a.width / 2 + i[0], a.height / 2 + i[1], 4, 4);
+    for (i of G)
+      c.beginPath(),
+      X = U + i[1] * Math.cos(i[0] * T + i[2]),
+      Y = V + i[1] * Math.sin(i[0] * T + i[2]),
+      c.arc(a.width / 2 + U, a.height / 2 + V, i[1], 0, 7),
+      c.moveTo(a.width / 2 + U, a.height / 2 + V),
+      c.lineTo(a.width / 2 + X, a.height / 2 + Y),
+      U = X,
+      V = Y,
+      c.stroke();
+      Z.push([X, Y]);
+      c.strokeStyle = "#33f";
+    c.lineWidth = 4;
+    c.beginPath();
+    for (i of Z) {
+      c.lineTo(a.width / 2 + i[0], a.height / 2 + i[1])
+    }
+    c.stroke()
+  `, 16)
 
-    /* END GOLF */
+  /* END GOLF */
 </script>
