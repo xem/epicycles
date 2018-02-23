@@ -1,0 +1,91 @@
+﻿<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+</style>
+<canvas id=a style="position: absolute"></canvas>
+<script>
+d = document;
+c = a.getContext("2d");
+a.width = innerWidth;
+a.height = innerHeight;
+
+/* GOLF */
+
+p=[];for(i of "@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH")p.push([40*(i.charCodeAt(i)>>2&7)-150,40*(i.charCodeAt(i)&3)-50]);
+  
+onmousemove = e => (x = e.x - a.width / 2, y = e.y - a.height / 2);
+onmousedown = e => u = 1;
+onmouseup = e => f();
+onkeydown = e => [_=>(p = [], f()),_=>(Z=Z.map(x=>[]),G.pop()),_=>(Q=~Q)][e.which%3]();
+  
+(f = _ => {
+  Z = [];G=[];
+  P = p.map(x => [...x]);
+
+  for (Q = T = u = I = i = 0; P.length != 2**(Math.log2(P.length) | 0); i = i + 2)
+    P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
+
+  for (; I < P.length; I++) {
+    for (A = J = 0; P.length >> A + 1; A++)
+      J = J << 1 | (I >> A & 1);
+    J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
+  }
+
+  for (H = 1; H * 2 <= P.length; H *= 2)
+    for (I = 0; I < P.length; I += H * 2)
+      for (J = I; J < I + H; J++)
+        E = P[J + H][0] * Math.cos(3.14 * (J - I) / H) + P[J + H][1] * Math.sin(3.14 * (J - I) / H),
+        M = -P[J + H][0] * Math.sin(3.14 * (J - I) / H) + P[J + H][1] * Math.cos(3.14 * (J - I) / H),
+        P[J + H][0] = P[J][0] - E,
+        P[J + H][1] = P[J][1] - M,
+        P[J][0] += E,
+        P[J][1] += M;
+
+  for (
+    G = [[0, Math.hypot(P[0][0], P[0][1]) / P.length, Math.atan2(P[0][1], P[0][0])]],
+    I = 0;
+    I++ < P.length / 2;
+  ) G.push(
+    [
+      I,
+      Math.hypot(P[I][0], P[I][1]) / P.length,
+      Math.atan2(P[I][1], P[I][0])
+    ],
+    [
+      -I,
+      Math.hypot(P[P.length - I][0], P[P.length - I][1]) / P.length,
+      Math.atan2(P[P.length - I][1], P[P.length - I][0])
+    ]
+  ),
+  Z.push([],[]);
+
+  G.pop();
+  G.sort((A, B) => B[1] - A[1])
+
+})();
+
+setInterval(
+  `T += .01;
+  a.width ^= g = U = V = 0;
+  c.translate(a.width / 2, a.height / 2);
+  u && (!p.length || Math.hypot(x - p[p.length - 1][0], y - p[p.length - 1][1]) > 9) && p.push([x, y]);
+  for (i of p) c.fillRect(i[0], i[1], 4, 4);
+  for (i of G)
+    c.beginPath(),
+    c.arc(U, V, i[1], 0, 7),
+    c.moveTo(U, V),
+    U += i[1] * Math.cos(i[0] * T + i[2]), V += i[1] * Math.sin(i[0] * T + i[2]),
+    c.lineTo(U, V),
+    c.stroke(),
+	
+	(G.length - ++g) % 8 || Z[g - 1].push([U, V]);
+  c.lineCap = "butt";
+  c.lineWidth = 4;
+  for (g = Q ? G.length - 2 : 0; g < G.length; g++) eval("c.strokeStyle=\`hsla(\${g/G.length*360|0},99%,60%,\${g/G.length}\`;c.beginPath();for (i of Z[g]) c.lineTo(i[0], i[1]);c.stroke()")
+  `,
+16)
+
+/* END GOLF */
+</script>

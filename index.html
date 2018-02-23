@@ -11,44 +11,92 @@ c = a.getContext("2d");
 a.width = innerWidth;
 a.height = innerHeight;
 
+
+// Vars / functions:
+
+// D: draw multiple paths (default: 1)
+// e: function param
+// f(e): (if e.x & y are set: add a point in p, update Q) then reset P and Z, compute points FFT and gears data
+// g: current gear
+// i, j: loop vars
+// p: points
+// P: points, transformed by FFT
+// m: mouse down flag
+// Q: number of gears drawn (default: max)
+// T: time
+// U, V: current gear coordinates
+// Z: points of the paths traced by each gear
+
+
+// Events:
+
+// mousedown: set m
+// mousemove: if m: add a point, reset path, recompute gears
+// mouseup: add a point, reset path, recompute gears
+// keydown: left = toggle multiple lines / up = clear path + add a gear / right = clear all, down = clear path + remove a gear
+
+
+
+// Code temporarly put aside:
+
+// console.log(JSON.stringify(p));
+
+// onmousedown = e => m = 1;
+//onmousemove = e => m && f(e);
+//onmouseup = e => m = f(e);
+
+// Math.hypot(e.x - a.width / 2 - p[p.length - 1][0], e.y - a.height / 2 - p[p.length - 1][1]) > 9)
+
+
 /* GOLF */
 
-T = 0;
 p = [];
-for(i of"@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH")p.push([40*(i.charCodeAt(i)>>2&7)-150,40*(i.charCodeAt(i)&3)-50]);
 
-onmousemove = e => (x = e.x - a.width / 2, y = e.y - a.height / 2);
-onmousedown = e => u = 1;
-onmouseup = e => f();
-onkeydown = e => e.which - 40 ? (p = [], f()) : (Z = [], G.pop());
-  
-(f = _ => {
-G = [];
-  Z = [];
+for(i of"@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH") p.push([50 * (i.charCodeAt() >> 2) - 950 , 50 * (i.charCodeAt() & 3) - 90]);
+
+onclick = e => f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
+
+onkeydown = e => [
+  e => Q--,
+  e => D ^= 1,
+  e => Q++,
+  e => f(p = [], G = [])
+][e.which % 4]();
+
+f = e => {
+
   P = p.map(x => [...x]);
-
-  for (u = I = i = 0; P.length != 2**(Math.log2(P.length) | 0); i = i + 2)
+  
+  Z = [];
+  
+  for (D = T = I = i = 0; P.length > 2**(Math.log2(P.length) | 0); i += 2)
     P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
 
-  for (; I < P.length; I++) {
+  for (I in P) {
     for (A = J = 0; P.length >> A + 1; A++)
-      J = J << 1 | (I >> A & 1);
+      J = J * 2 | (I >> A & 1);
     J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
   }
 
   for (H = 1; H * 2 <= P.length; H *= 2)
     for (I = 0; I < P.length; I += H * 2)
       for (J = I; J < I + H; J++)
-        E = P[J + H][0] * Math.cos(3.14 * (J - I) / H) + P[J + H][1] * Math.sin(3.14 * (J - I) / H),
-        M = -P[J + H][0] * Math.sin(3.14 * (J - I) / H) + P[J + H][1] * Math.cos(3.14 * (J - I) / H),
+        E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
+        M = -P[J + H][0] * Math.sin(Math.PI * (J - I) / H) + P[J + H][1] * Math.cos(Math.PI * (J - I) / H),
         P[J + H][0] = P[J][0] - E,
         P[J + H][1] = P[J][1] - M,
         P[J][0] += E,
         P[J][1] += M;
 
   for (
-    G = [[0, Math.hypot(P[0][0], P[0][1]) / P.length, Math.atan2(P[0][1], P[0][0])]],
-    I = 0;
+    I = 0,
+    G = [
+      [
+        I,
+        Math.hypot(P[I][0], P[I][1]) / P.length,
+        Math.atan2(P[I][1], P[I][0])
+      ]
+    ];
     I++ < P.length / 2;
   ) G.push(
     [
@@ -62,33 +110,49 @@ G = [];
       Math.atan2(P[P.length - I][1], P[P.length - I][0])
     ]
   );
-
-  G.pop();
   
-  G.sort((A, B) => B[1] - A[1])
+  G.sort((A, B) => B[1] - A[1]);
+  
+  Q = G.length - 2;
+};
 
-})();
+f();
 
 setInterval(
-  `T += .01;
-  a.width ^= U = V = 0;
+e => {
+  
+  T += .01;
+  a.width ^= U = V = g = 0;
   c.translate(a.width / 2, a.height / 2);
-  u && (!p.length || Math.hypot(x - p[p.length - 1][0], y - p[p.length - 1][1]) > 9) && p.push([x, y]);
-  for (i of p) c.fillRect(i[0], i[1], 4, 4);
-  for (i of G)
-    c.beginPath(),
-    c.arc(U, V, i[1], 0, 7),
-    c.moveTo(U, V),
-    U += i[1] * Math.cos(i[0] * T + i[2]), V += i[1] * Math.sin(i[0] * T + i[2]),
-    c.lineTo(U, V),
-    c.stroke();
-    Z.push([U, V]);
-  c.strokeStyle = "#33f";
-  c.lineWidth = 4;
-  c.beginPath();
-  for (i of Z) c.lineTo(i[0], i[1]);
-  c.stroke()`,
-16)
+  
+  for (i of p)
+	c.fillRect(i[0], i[1], 2, 2);
+    
+  for (i of G){
+    g <= Q && c.beginPath();
+    g <= Q && c.arc(U, V, i[1], 0, 7);
+    g <= Q && c.moveTo(U, V);
+    U += i[1] * Math.cos(i[0] * T + i[2]);
+    V += i[1] * Math.sin(i[0] * T + i[2]);
+    g <= Q && c.lineTo(U, V);
+    g <= Q && c.stroke();
+      
+    Z[g] || (Z[g] = []);
+    Z[g].length < 500 && Z[g].push([U,V]);
+    
+    if(g == Q || !D && g && g <= Q && g % 8 < 1){
+      c.beginPath();
+      c.lineWidth = 5;
+      c.strokeStyle = `hsl(${(Q-g)*99},50%,50%`;
+      c.moveTo(Z[g][0], Z[g][1]);
+      for(j of Z[g]) j && c.lineTo(j[0], j[1]);
+      c.stroke()
+    }
+    g++;
+  }
+},
+9
+)
 
 /* END GOLF */
 </script>
