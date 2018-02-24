@@ -54,7 +54,11 @@ p = [];
 
 for(i of "@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH") p.push([50 * (i.charCodeAt() >> 2) - 950 , 50 * (i.charCodeAt() & 3) - 90]);
 
-onclick = e => f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
+onmousedown = e => m = 1;
+
+onmousemove = e => m && f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
+
+onmouseup = e => m = f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
 
 onkeydown = e => [
   e => Q--,
@@ -124,7 +128,7 @@ e => {
     g <= Q && c.stroke();
       
     Z[g] = Z[g] || [];
-    Z[g].length < 900 && Z[g].push([U,V]);
+    Z[g].length < 650 && Z[g].push([U,V]);
     g++;
   }
 
@@ -135,7 +139,7 @@ e => {
     c.strokeStyle = `hsl(${(Q-g)*9},50%,50%`,
     c.moveTo(Z[g][0], Z[g][1]);
     for(j of Z[g])
-      (g == Q || D && g && g <= Q && g % 16 < 1) && c.lineTo(j[0], j[1]);
+      (g == Math.min(Q, P.length - 1) || D && g && g <= Q && g % 16 < 1) && c.lineTo(j[0], j[1]);
     c.stroke();
     g++
   }
