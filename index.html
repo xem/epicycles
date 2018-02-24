@@ -82,19 +82,20 @@ f = e => {
     for (I = 0; I < P.length; I += H * 2)
       for (J = I; J < I + H; J++)
         E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
-        M = -P[J + H][0] * Math.sin(Math.PI * (J - I) / H) + P[J + H][1] * Math.cos(Math.PI * (J - I) / H),
+        M = P[J + H][1] * Math.cos(Math.PI * (J - I) / H) -P[J + H][0] * Math.sin(Math.PI * (J - I) / H),
         P[J + H][0] = P[J][0] - E,
         P[J + H][1] = P[J][1] - M,
         P[J][0] += E,
         P[J][1] += M;
 
-  for (I = 0,G = [];I++ < P.length;) G.push(
-    [
-      I+P.length / 2-P.length,
-      Math.hypot(P[(I+P.length / 2)%P.length][0], P[(I+P.length / 2)%P.length][1]) / P.length,
-      Math.atan2(P[(I+P.length / 2)%P.length][1], P[(I+P.length / 2)%P.length][0])
-    ]
-  );
+  for (I = P.length, G = []; I--;)
+    G.push(
+      [
+        I + P.length / 2-P.length,
+        Math.hypot(P[(I+P.length / 2)%P.length][0], P[(I+P.length / 2)%P.length][1]) / P.length,
+        Math.atan2(P[(I+P.length / 2)%P.length][1], P[(I+P.length / 2)%P.length][0])
+      ]
+    );
   
   G.sort((i, B) => B[1] - i[1]);
   
@@ -111,29 +112,32 @@ e => {
   c.translate(a.width / 2, a.height / 2);
   
   for (i of p)
-	c.fillRect(i[0], i[1], 2, 2);
+    c.fillRect(i[0], i[1], 2, 2);
     
   for (i of G){
-    g <= Q && c.beginPath();
-    g <= Q && c.arc(U, V, i[1], 0, 7);
-    g <= Q && c.moveTo(U, V);
+    c.beginPath();
+    c.arc(U, V, i[1], 0, 7);
+    c.moveTo(U, V);
     U += i[1] * Math.cos(i[0] * T + i[2]);
     V += i[1] * Math.sin(i[0] * T + i[2]);
-    g <= Q && c.lineTo(U, V);
+    c.lineTo(U, V);
     g <= Q && c.stroke();
       
-	Z[g] = Z[g] || [];
-    Z[g].push([U,V]);
-    
-    if(g == Q || !D && g && g <= Q && g % 8 < 1){
-      c.beginPath();
-      c.lineWidth = 5;
-      c.strokeStyle = `hsl(${(Q-g)*99},50%,50%`;
-      c.moveTo(Z[g][0], Z[g][1]);
-      for(j of Z[g]) j && c.lineTo(j[0], j[1]);
-      c.stroke()
-    }
+    Z[g] = Z[g] || [];
+    Z[g].length < 900 && Z[g].push([U,V]);
     g++;
+  }
+
+  g = 0;
+  for (i of G){
+    c.beginPath();
+    c.lineWidth = 5,
+    c.strokeStyle = `hsl(${(Q-g)*9},50%,50%`,
+    c.moveTo(Z[g][0], Z[g][1]);
+    for(j of Z[g])
+      (g == Q || D && g && g <= Q && g % 16 < 1) && c.lineTo(j[0], j[1]);
+    c.stroke();
+    g++
   }
 },
 9
