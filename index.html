@@ -1,4 +1,5 @@
-﻿<style>
+﻿<body id=b>
+<style>
     body {
         margin: 0;
         overflow: hidden;
@@ -52,52 +53,59 @@ a.height = innerHeight;
 
 p = [];
 
+m = 0;
+
 for(i of"@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH") p.push([50 * (i.charCodeAt() >> 2) - 950, 50 * (i.charCodeAt() & 3) - 90]);
 
 onmousedown = e => m = 1;
 
-onmousemove = e => m && f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
+onmousemove = e => m && f(e);
 
-onmouseup = e => m = f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
+onmouseup = e => (m = 0, f(e));
 
 onkeydown = e => [
-  e => Q--,
   e => D ^= 1,
   e => Q++,
-  e => f(p = [], G = [])
-][e.which % 4]();
+  e => (p = [], G = [], f()),
+  e => Q--
+][e.which - 37]();
 
 f = e => {
 
+  e 
+  &&
+  (!p.length || (p.length && Math.hypot(
+    e.x - a.width / 2 - p[p.length - 1][0],
+    e.y - a.height / 2 - p[p.length - 1][1]
+  ) > 9))
+  &&
+  p.push([e.x - a.width / 2, e.y - a.height / 2]);
+  
   P = p.map(e => [...e]);
   
   Z = [];
   
-  for (i = 0; P.length > 2**(Math.log2(P.length) | 0); i += 2)
+  for (b.bgColor = i = D = T = 0; P.length > 2**(Math.log2(P.length) | 0); i += 2)
     P.splice(i + 1, 0, [(P[i][0] + P[i + 1][0]) / 2, (P[i][1] + P[i + 1][1]) / 2]);
 
-  for (I in P) {
-    for (A = J = D = T = 0; P.length >> A + 1; A++)
-      J = J * 2 | (I >> A & 1);
-    J > I && ([P[I][0], P[J][0], P[I][1], P[J][1]] = [P[J][0], P[I][0], P[J][1], P[I][1]])
+  _ = [];
+
+  for (i in P) {
+      _[i] = [0, 0];
+      for (k in P)
+          _[i][0] += (P[k][0] * Math.cos(k * -2 * Math.PI * i / P.length) - P[k][1] * Math.sin(k * -2 * Math.PI * i / P.length)),
+          _[i][1] += (P[k][0] * Math.sin(k * -2 * Math.PI * i / P.length) + P[k][1] * Math.cos(k * -2 * Math.PI * i / P.length));
   }
 
-  for (H = 1; H * 2 <= P.length; H *= 2)
-    for (I = 0; I < P.length; I += H * 2)
-      for (J = I; J < I + H; J++)
-        E = P[J + H][0] * Math.cos(Math.PI * (J - I) / H) + P[J + H][1] * Math.sin(Math.PI * (J - I) / H),
-        M = P[J + H][1] * Math.cos(Math.PI * (J - I) / H) -P[J + H][0] * Math.sin(Math.PI * (J - I) / H),
-        P[J + H][0] = P[J][0] - E,
-        P[J + H][1] = P[J][1] - M,
-        P[J][0] += E,
-        P[J][1] += M;
+  P = _;
 
+  if(P.length)
   for (I = P.length, G = []; I--;)
     G.push(
       [
         I + P.length / 2 - P.length,
-        Math.hypot(P[(I + P.length / 2)%P.length][0], P[(I + P.length / 2) % P.length][1]) / P.length,
-        Math.atan2(P[(I + P.length / 2)%P.length][1], P[(I + P.length / 2) % P.length][0])
+        Math.hypot(P[(I + P.length / 2) % P.length][0], P[(I + P.length / 2) % P.length][1]) / P.length,
+        Math.atan2(P[(I + P.length / 2) % P.length][1], P[(I + P.length / 2) % P.length][0])
       ]
     );
   
@@ -114,6 +122,8 @@ e => {
   T += .01;
   a.width ^= U = V = g = 0;
   c.translate(a.width / 2, a.height / 2);
+  c.strokeStyle = "#fff";
+  c.fillStyle = "#fff";
   
   for (i of p)
     c.fillRect(i[0], i[1], 2, 2);
@@ -135,11 +145,11 @@ e => {
   g = 0;
   for (i of G){
     c.beginPath();
-    c.lineWidth = 5,
+    c.lineWidth = 4 + (g == Q) * 4,
     c.strokeStyle = `hsl(${(Q-g)*9},50%,50%`,
     c.moveTo(Z[g][0], Z[g][1]);
     for(j of Z[g])
-      (g == Math.min(Q, P.length - 1) || D && g && g <= Q && g % 16 < 1) && c.lineTo(j[0], j[1]);
+      (g == Math.min(Q, P.length - 1) || D && g && g <= Q && g % 8 < 1) && c.lineTo(j[0], j[1]);
     c.stroke();
     g++
   }
