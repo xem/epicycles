@@ -52,7 +52,7 @@ a.height = innerHeight;
 
 p = [];
 
-for(i of"@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH") p.push([50 * (i.charCodeAt() >> 2) - 950 , 50 * (i.charCodeAt() & 3) - 90]);
+for(i of "@DGCBCGDPHIRSKWTQTW[XZ]Z_Z[SRIHHH") p.push([50 * (i.charCodeAt() >> 2) - 950 , 50 * (i.charCodeAt() & 3) - 90]);
 
 onclick = e => f(p.push([e.x  - a.width / 2, e.y - a.height / 2]));
 
@@ -88,32 +88,17 @@ f = e => {
         P[J][0] += E,
         P[J][1] += M;
 
-  for (
-    I = 0,
-    G = [
-      [
-        I,
-        Math.hypot(P[I][0], P[I][1]) / P.length,
-        Math.atan2(P[I][1], P[I][0])
-      ]
-    ];
-    I++ < P.length / 2;
-  ) G.push(
+  for (I = 0,G = [];I++ < P.length;) G.push(
     [
-      I,
-      Math.hypot(P[I][0], P[I][1]) / P.length,
-      Math.atan2(P[I][1], P[I][0])
-    ],
-    [
-      -I,
-      Math.hypot(P[P.length - I][0], P[P.length - I][1]) / P.length,
-      Math.atan2(P[P.length - I][1], P[P.length - I][0])
+      I+P.length / 2-P.length,
+      Math.hypot(P[(I+P.length / 2)%P.length][0], P[(I+P.length / 2)%P.length][1]) / P.length,
+      Math.atan2(P[(I+P.length / 2)%P.length][1], P[(I+P.length / 2)%P.length][0])
     ]
   );
   
-  G.sort((A, B) => B[1] - A[1]);
+  G.sort((i, B) => B[1] - i[1]);
   
-  Q = G.length - 2;
+  Q = P.length - 1;
 };
 
 f();
@@ -137,8 +122,8 @@ e => {
     g <= Q && c.lineTo(U, V);
     g <= Q && c.stroke();
       
-    Z[g] || (Z[g] = []);
-    Z[g].length < 500 && Z[g].push([U,V]);
+	Z[g] = Z[g] || [];
+    Z[g].push([U,V]);
     
     if(g == Q || !D && g && g <= Q && g % 8 < 1){
       c.beginPath();
