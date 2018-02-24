@@ -2,9 +2,9 @@ Epic Cycles
 ===
 
 
-A JS1K 2018 entry made with <3 by BalintCsala and xem
+A JS1K 2018 entry golfed with <3 by BalintCsala and xem
 
-Thanks to romancortes, eljj, antimatter15, brettcvz, paul bourke, and kuvos for their help; work and ideas!
+Thanks to romancortes, eljj, antimatter15, brettcvz, paul bourke, and kuvos for their help, individual work and ideas!
 
 **Commented:**
 
